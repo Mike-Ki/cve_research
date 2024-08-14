@@ -1,0 +1,10 @@
+rules:
+- id: my_pattern_id
+  pattern: |
+      ObjectInputStream $OOS = new ObjectInputStream(...);
+      ...
+      $OOS.readObject();
+  message: Semgrep found a match
+  languages: [java]
+  severity: WARNING
+  

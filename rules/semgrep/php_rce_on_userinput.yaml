@@ -1,0 +1,25 @@
+rules:
+- id: possible-rce
+  patterns:
+    - pattern-either:
+        - pattern: $FUNC($INPUT[...]);
+        - pattern: $FUNC($INPUT[...],...);
+        - pattern: |
+            $X = $INPUT[...];
+            ...
+            $FUNC($X);
+        - pattern: |
+            $X = $INPUT[...];
+            ...
+            $FUNC($X,...);
+    - metavariable-regex:
+        metavariable: $FUNC
+        regex: eval|system|exec|shell_exec|passthru|unserialize|popen|proc_open|pcntl_exec|file_get_contents|file_put_contents|include|require_once|require
+    - metavariable-regex:
+          metavariable: $INPUT
+          regex: \$_GET|\$_POST|\$_REQUEST|\$_SERVER|\$_COOKIE
+
+  message: Possible easy RCE
+  languages: [php]
+  severity: WARNING
+  
